@@ -454,12 +454,13 @@ class LocationUpdatesService : Service(), MethodChannel.MethodCallHandler {
 
     private fun onNewLocation(location: Location, locations: List<Location> = ArrayList()) {
         // Check for kill-switch in prefs to stop service if needed
-        if (pref.getBoolean(STOP_SERVICE, false)) {
+        val killSwitchPref = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        if (killSwitchPref.getBoolean("flutter.$STOP_SERVICE", false)) {
             // Log
             Log.i("LocationService", "Stopping service due to kill-switch")
             triggerForegroundServiceStop()
             // Reset kill-switch
-            pref.edit().remove(STOP_SERVICE).apply()
+            killSwitchPref.edit().remove("flutter.$STOP_SERVICE").apply()
             return
         } else {
             // Log
