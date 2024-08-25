@@ -28,11 +28,6 @@ class BackgroundLocationService : MethodChannel.MethodCallHandler,
 
         private var instance: BackgroundLocationService? = null
 
-        fun kill() {
-            instance?.stopLocationService()
-            Log.i(BackgroundLocationPlugin.TAG, "Killing service due to kill-switch")
-        }
-
         /**
          * Requests the singleton instance of [BackgroundLocationService] or creates it,
          * if it does not yet exist.
@@ -147,7 +142,7 @@ class BackgroundLocationService : MethodChannel.MethodCallHandler,
         return false
     }
 
-    private fun stopLocationService(): Int {
+    fun stopLocationService(): Int {
         LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver!!)
 
         val intent = Intent(context!!, LocationUpdatesService::class.java)
