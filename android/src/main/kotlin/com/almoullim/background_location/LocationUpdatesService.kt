@@ -453,6 +453,18 @@ class LocationUpdatesService : Service(), MethodChannel.MethodCallHandler {
     }
 
     private fun onNewLocation(location: Location, locations: List<Location> = ArrayList()) {
+        // Check for kill-switch in prefs to stop service if needed
+        if (pref.getBoolean(STOP_SERVICE, false)) {
+            // Log
+            Log.i("LocationService", "Stopping service due to kill-switch")
+            triggerForegroundServiceStop()
+            // Reset kill-switch
+            pref.edit().remove(STOP_SERVICE).apply()
+            return
+        } else {
+            // Log
+            Log.i("LocationService", "Kill switch not active")
+        }
         mLocation = location
         val intent = Intent(ACTION_BROADCAST)
         intent.putExtra(ACTION_BROADCAST_TYPE, ACTION_BROADCAST_LOCATION)
