@@ -458,7 +458,7 @@ class LocationUpdatesService : Service(), MethodChannel.MethodCallHandler {
         if (killSwitchPref.getBoolean("flutter.$STOP_SERVICE", false)) {
             // Log
             Log.i("LocationService", "Stopping service due to kill-switch")
-            BackgroundLocationService.getInstance().stopLocationService()
+            triggerForegroundServiceStop()
             // Reset kill-switch
             killSwitchPref.edit().remove("flutter.$STOP_SERVICE").apply()
             return

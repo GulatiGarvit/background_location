@@ -142,15 +142,8 @@ class BackgroundLocationService : MethodChannel.MethodCallHandler,
         return false
     }
 
-    fun stopLocationService(): Int {
-        // Check if context or receiver is null
-        if (context == null) {
-            Log.i(BackgroundLocationPlugin.TAG, "Context is null")
-        } else if (receiver == null) {
-            Log.i(BackgroundLocationPlugin.TAG, "Receiver is null")
-        } else {
-            LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver!!)
-        }
+    private fun stopLocationService(): Int {
+        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver!!)
 
         val intent = Intent(context!!, LocationUpdatesService::class.java)
         intent.setAction("${context!!.packageName}.service_requests")
